@@ -7,7 +7,7 @@
 #pragma
 #include "picojson.h"
 #include <humans_msgs/Humans.h>
-//#include <tf/transform_broadcaster.h>
+#include <tf/transform_broadcaster.h>
 #include <cstdlib>
 
 typedef std::map<int, std::string> JointMap;
@@ -21,24 +21,36 @@ public:
 };
 
 namespace JsonToMsg{
-  /*
-  bool publishJointTF(ros::NodeHandle& nh, tf::TransformBroadcaster& br, tf::Transform& transform, std::string j_name, POSE j, std::string tf_prefix, int uid)
+  
+  bool publishJointTF(ros::NodeHandle& nh, 
+		      tf::TransformBroadcaster& br, tf::Transform& transform, 
+		      humans_msgs::Human h, int j_n, std::string tf_prefix)
   {
     //cout << "joint name: "<< j_name << ", (x, y, z) = " <<j.position.x <<", "<<j.position.y <<", "<<j.position.z <<endl;
-    transform.setOrigin(tf::Vector3(j.z ,j.x, j.y));
-    //transform.setRotation(tf::Quaternion(j.orientation.x, j.orientation.y, j.orientation.z, j.orientation.w));
-    transform.setRotation(tf::Quaternion(0, 0, 0, 1));
+    transform.setOrigin(tf::Vector3(h.body.joints[j_n].position.x,
+				    h.body.joints[j_n].position.y, 
+				    h.body.joints[j_n].position.z));
+
+    transform.setRotation(tf::Quaternion(h.body.joints[j_n].orientation.x, 
+					 h.body.joints[j_n].orientation.y, 
+					 h.body.joints[j_n].orientation.z, 
+					 h.body.joints[j_n].orientation.w));
+    //transform.setRotation(tf::Quaternion(0, 0, 0, 1));
     
     std::stringstream frame_id_stream;
     std::string frame_id;
-    frame_id_stream << "/user_" << uid << "/" << j_name;
+    frame_id_stream << "/" << h.body.tracking_id <<"/" << h.body.joints[j_n].joint_name;
     frame_id = frame_id_stream.str();
     br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), tf_prefix, frame_id));
     return true;
   }
-  */
-  void body( const KinectPack kinectPack , humans_msgs::Humans *kinect_msg, double cols, double rows)
+  
+  void body(ros::NodeHandle& nh, 
+	    tf::TransformBroadcaster& br, tf::Transform& transform,
+	    const KinectPack kinectPack , humans_msgs::Humans *kinect_msg, 
+	    double cols, double rows)
   {
+
     JointMap named_joints;
     named_joints[0] = "SpineBase";
     named_joints[1] = "SpineMid"; 
@@ -106,21 +118,28 @@ namespace JsonToMsg{
 		picojson::array arrayJoint = objBody["Joints"].get<picojson::array>();
 		//kinect_msg->human[index].body.joints.resize(arrayJoint.size());
 		int j_name = 0;
-		for( std::vector<picojson::value>::iterator itrJoint = arrayJoint.begin(); itrJoint != arrayJoint.end(); ++itrJoint, ++j_name)
+		for( std::vector<picojson::value>::iterator itrJoint = arrayJoint.begin(); 
+		     itrJoint != arrayJoint.end(); ++itrJoint, ++j_name)
 		  {
 		    humans_msgs::Joints tmp_joint;
 		    
-		    picojson::object &objJoint = itrJoint->get<picojson::object>();
-		    picojson::object &objPositionColorSpace = objJoint["PositionColorSpace"].get<picojson::object>();
-		    tmp_joint.position_color_space.x = (int)objPositionColorSpace["X"].get<double>() * cols;
-		    tmp_joint.position_color_space.y = (int)objPositionColorSpace["Y"].get<double>() * rows;
+		    picojson::object &objJoint = 
+		      itrJoint->get<picojson::object>();
+		    picojson::object &objPositionColorSpace = 
+		      objJoint["PositionColorSpace"].get<picojson::object>();
+		    tmp_joint.position_color_space.x = 
+		      (int)objPositionColorSpace["X"].get<double>() * cols;
+		    tmp_joint.position_color_space.y = 
+		      (int)objPositionColorSpace["Y"].get<double>() * rows;
 		    
-		    picojson::object &objPosition = objJoint["Position"].get<picojson::object>();
+		    picojson::object &objPosition = 
+		      objJoint["Position"].get<picojson::object>();
 		    tmp_joint.position.y = (double)objPosition["X"].get<double>();
 		    tmp_joint.position.z = (double)objPosition["Y"].get<double>();
 		    tmp_joint.position.x = (double)objPosition["Z"].get<double>();
 
-		    picojson::object &objOrientation = objJoint["Orientation"].get<picojson::object>();
+		    picojson::object &objOrientation = 
+		      objJoint["Orientation"].get<picojson::object>();
 		    tmp_joint.orientation.x = (double)objOrientation["X"].get<double>();
 		    tmp_joint.orientation.y = (double)objOrientation["Y"].get<double>();
 		    tmp_joint.orientation.z = (double)objOrientation["Z"].get<double>();
@@ -131,8 +150,10 @@ namespace JsonToMsg{
 
 		    tmp_human.body.joints.push_back( tmp_joint );
 		    //tmp_human.body.b
-		    //おそらくBody_IndexはJSONにまだ含まれていない
-		    //publishJointTF(nh, br, transform, named_joints[j_name], pose, tf_prefix, body_id);
+		    if(tmp_joint.orientation.x || tmp_joint.orientation.y || tmp_joint.orientation.z || tmp_joint.orientation.w)
+		      {
+			publishJointTF(nh, br, transform, tmp_human, j_name, "camera_link");
+		      }
 		  }
 		kinect_msg->human.push_back( tmp_human );	
 		++people_num;

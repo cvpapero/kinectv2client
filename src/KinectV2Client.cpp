@@ -116,6 +116,9 @@ void test(){
   //image_transport::Publisher bodyindex_pub = it.advertise("/camera/image/bodyindex", 1);
   ros::Publisher kinectv2_pub = nh.advertise<humans_msgs::Humans>("/humans/KinectV2",10);
 
+  tf::TransformBroadcaster br;
+  tf::Transform transform;
+
   while( true ){
 
     // REP-REQ形式なので要求メッセージを送信する
@@ -165,7 +168,8 @@ void test(){
     double rows_scale = (float)imageColor.rows / (float)imageDepth.rows;
     //cout << "cols:" <<cols_scale << endl;
     //cout << "rows:" <<rows_scale << endl;
-    JsonToMsg::body(kinectPack, &kinect_msg, cols_scale, rows_scale);
+    JsonToMsg::body(nh, br, transform, 
+		    kinectPack, &kinect_msg, cols_scale, rows_scale);
     // 検知した人間のJoint情報を元にスケルトンを描画
     //KinectPackUtil::drawSkeleton( imageColor, kinectPack, cols_scale, rows_scale); 
     // 表示
@@ -218,7 +222,7 @@ void test(){
     cv_img_bodyindex.encoding = "mono8";  
     cv_img_bodyindex.image = imageBodyIndex; 
     */
-    //color_pub.publish(cv_img_color.toImageMsg());
+    color_pub.publish(cv_img_color.toImageMsg());
     /*
     depth_pub.publish(cv_img_depth.toImageMsg());
     bodyindex_pub.publish(cv_img_bodyindex.toImageMsg());
@@ -226,7 +230,7 @@ void test(){
    
     kinect_msg.header.stamp = ros::Time::now();
     kinect_msg.header.frame_id ="camera_link";
-    kinect_msg.image = *cv_img_color.toImageMsg();
+    //kinect_msg.image = *cv_img_color.toImageMsg();
     kinectv2_pub.publish(kinect_msg);
    
     

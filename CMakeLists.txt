@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   tf
+  humans_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -176,7 +177,5 @@ add_library(base64
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(KinectV2ClientOld src/KinectV2ClientOld.cpp)
-target_link_libraries(KinectV2ClientOld ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZMQ_LIBRARIE} msgpack Util base64)
 add_executable(KinectV2Client src/KinectV2Client.cpp)
 target_link_libraries(KinectV2Client ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZMQ_LIBRARIE} msgpack Util base64)
