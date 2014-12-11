@@ -24,7 +24,7 @@ namespace JsonToMsg{
   
   bool publishJointTF(ros::NodeHandle& nh, 
 		      tf::TransformBroadcaster& br, tf::Transform& transform, 
-		      humans_msgs::Human h, int j_n, std::string tf_prefix)
+		      humans_msgs::Human h, int j_n, std::string camera_frame)
   {
     //cout << "joint name: "<< j_name << ", (x, y, z) = " <<j.position.x <<", "<<j.position.y <<", "<<j.position.z <<endl;
     transform.setOrigin(tf::Vector3(h.body.joints[j_n].position.x,
@@ -39,16 +39,18 @@ namespace JsonToMsg{
     
     std::stringstream frame_id_stream;
     std::string frame_id;
-    frame_id_stream << "/" << h.body.tracking_id <<"/" << h.body.joints[j_n].joint_name;
+    frame_id_stream << "/" << h.body.tracking_id <<"/" 
+		    << h.body.joints[j_n].joint_name;
     frame_id = frame_id_stream.str();
-    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), tf_prefix, frame_id));
+    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), 
+					  camera_frame, frame_id));
     return true;
   }
   
   void body(ros::NodeHandle& nh, 
 	    tf::TransformBroadcaster& br, tf::Transform& transform,
 	    const KinectPack kinectPack , humans_msgs::Humans *kinect_msg, 
-	    double cols, double rows)
+	    double cols, double rows, std::string camera_frame)
   {
 
     JointMap named_joints;
@@ -80,32 +82,42 @@ namespace JsonToMsg{
 
     picojson::value v;
     std::string err;
-    picojson::parse( v, kinectPack.bodies.jsonBodyInfo.begin(), kinectPack.bodies.jsonBodyInfo.end(), &err );
+    picojson::parse( v, kinectPack.bodies.jsonBodyInfo.begin(), 
+		     kinectPack.bodies.jsonBodyInfo.end(), &err );
 
 
     if ( err.empty() )
       {
-	picojson::object &objBodyInfo = v.get< picojson::object >();
-	picojson::array arrayBody = objBodyInfo["bodies"].get< picojson::array >();
+	picojson::object &objBodyInfo 
+	  = v.get< picojson::object >();
+	picojson::array arrayBody 
+	  = objBodyInfo["bodies"].get< picojson::array >();
 	//kinect_msg->human.resize(arrayBody.size());
 
 	int index = 0;
 	int people_num = 0;
-	for( std::vector<picojson::value>::iterator itrBody = arrayBody.begin(); itrBody != arrayBody.end(); ++itrBody, ++index )
+	for( std::vector<picojson::value>::iterator itrBody = arrayBody.begin();
+	     itrBody != arrayBody.end(); 
+	     ++itrBody, ++index )
 	  {
-	    picojson::object &objBody = itrBody->get<picojson::object>();
-	    bool isTracking =  objBody["isTracked"].get< bool >() ;
+	    picojson::object &objBody 
+	      = itrBody->get<picojson::object>();
+	    bool isTracking 
+	      =  objBody["isTracked"].get< bool >() ;
 	    if ( isTracking )
 	      {
-		long long tracking_id = std::atoll( objBody["trackingId"].get< std::string >().c_str() );
+		long long tracking_id 
+		  = std::atoll( objBody["trackingID"].get< std::string >().c_str() );
 		std::cout << "tracking_id[" << index << "]:" << tracking_id << std::endl;
 		humans_msgs::Human tmp_human;
 		//hoge.body.is_tracked = isTracking;
 		
 		tmp_human.body.is_tracked = isTracking;
 	        tmp_human.body.tracking_id = tracking_id;
-		tmp_human.body.left_hand_state = objBody["leftHandState"].get< double >() ;
-	        tmp_human.body.right_hand_state = objBody["rightHandState"].get< double >() ;
+		tmp_human.body.left_hand_state 
+		  = objBody["leftHandState"].get< double >() ;
+	        tmp_human.body.right_hand_state 
+		  = objBody["rightHandState"].get< double >() ;
 		
 		/*
 		kinect_msg->human[index].body.is_tracked = isTracking;
@@ -115,7 +127,8 @@ namespace JsonToMsg{
 		*/
 		//kinect_msg->human.push_back( hoge );
 
-		picojson::array arrayJoint = objBody["Joints"].get<picojson::array>();
+		picojson::array arrayJoint 
+		  = objBody["Joints"].get<picojson::array>();
 		//kinect_msg->human[index].body.joints.resize(arrayJoint.size());
 		int j_name = 0;
 		for( std::vector<picojson::value>::iterator itrJoint = arrayJoint.begin(); 
@@ -125,34 +138,44 @@ namespace JsonToMsg{
 		    
 		    picojson::object &objJoint = 
 		      itrJoint->get<picojson::object>();
-		    picojson::object &objPositionColorSpace = 
-		      objJoint["PositionColorSpace"].get<picojson::object>();
-		    tmp_joint.position_color_space.x = 
-		      (int)objPositionColorSpace["X"].get<double>() * cols;
-		    tmp_joint.position_color_space.y = 
-		      (int)objPositionColorSpace["Y"].get<double>() * rows;
+		    picojson::object &objPositionColorSpace 
+		      = objJoint["PositionColorSpace"].get<picojson::object>();
+		    tmp_joint.position_color_space.x 
+		      = (int)objPositionColorSpace["X"].get<double>() * cols;
+		    tmp_joint.position_color_space.y 
+		      = (int)objPositionColorSpace["Y"].get<double>() * rows;
 		    
 		    picojson::object &objPosition = 
 		      objJoint["Position"].get<picojson::object>();
-		    tmp_joint.position.y = (double)objPosition["X"].get<double>();
-		    tmp_joint.position.z = (double)objPosition["Y"].get<double>();
-		    tmp_joint.position.x = (double)objPosition["Z"].get<double>();
+		    tmp_joint.position.y 
+		      = (double)objPosition["X"].get<double>();
+		    tmp_joint.position.z 
+		      = (double)objPosition["Y"].get<double>();
+		    tmp_joint.position.x 
+		      = (double)objPosition["Z"].get<double>();
 
 		    picojson::object &objOrientation = 
 		      objJoint["Orientation"].get<picojson::object>();
-		    tmp_joint.orientation.x = (double)objOrientation["X"].get<double>();
-		    tmp_joint.orientation.y = (double)objOrientation["Y"].get<double>();
-		    tmp_joint.orientation.z = (double)objOrientation["Z"].get<double>();
-		    tmp_joint.orientation.w = (double)objOrientation["W"].get<double>();
+		    tmp_joint.orientation.x 
+		      = (double)objOrientation["X"].get<double>();
+		    tmp_joint.orientation.y 
+		      = (double)objOrientation["Y"].get<double>();
+		    tmp_joint.orientation.z 
+		      = (double)objOrientation["Z"].get<double>();
+		    tmp_joint.orientation.w 
+		      = (double)objOrientation["W"].get<double>();
 
-		    tmp_joint.tracking_state = objJoint["trackingState"].get<double>();
+		    tmp_joint.tracking_state 
+		      = objJoint["trackingState"].get<double>();
 		    tmp_joint.joint_name = named_joints[j_name];
 
 		    tmp_human.body.joints.push_back( tmp_joint );
 		    //tmp_human.body.b
-		    if(tmp_joint.orientation.x || tmp_joint.orientation.y || tmp_joint.orientation.z || tmp_joint.orientation.w)
+		    if(tmp_joint.orientation.x || tmp_joint.orientation.y 
+		       || tmp_joint.orientation.z || tmp_joint.orientation.w)
 		      {
-			publishJointTF(nh, br, transform, tmp_human, j_name, "camera_link");
+			publishJointTF(nh, br, transform, tmp_human, 
+				       j_name, camera_frame);
 		      }
 		  }
 		kinect_msg->human.push_back( tmp_human );	
