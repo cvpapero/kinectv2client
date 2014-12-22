@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   tf
   humans_msgs
+  camera_info_manager
 )
 
 ## System dependencies are found with CMake's conventions
