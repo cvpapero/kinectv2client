@@ -1,0 +1,103 @@
+<launch>
+  <arg name="k1" value="camera_link" />
+  <arg name="k2" value="kinect_2" />
+  <arg name="k3" value="kinect_3" />
+  <arg name="k4" value="kinect_4" />
+  <arg name="k5" value="kinect_5" />
+  <arg name="k6" value="kinect_6" />
+  <arg name="k7" value="kinect_7" />
+
+  <node pkg="kinectv2client" type="KinectV2Client" respawn="false" name="kinect_1" >
+	<param name="ipaddress" value="133.19.23.90" /> 
+	<param name="port" value="7745" />
+  	<param name="camera_frame" value="$(arg k1)" />
+  </node>
+
+  <node pkg="kinectv2client" type="KinectV2Client" respawn="false" name="kinect_2" >
+	<param name="ipaddress" value="133.19.23.110" /> 
+	<param name="port" value="7745" />
+  	<param name="camera_frame" value="$(arg k2)" />
+  </node>
+
+  <node pkg="kinectv2client" type="KinectV2Client" respawn="false" name="kinect_3" >
+	<param name="ipaddress" value="133.19.23.224" /> 
+	<param name="port" value="7745" />
+  	<param name="camera_frame" value="$(arg k3)" />
+  </node>
+
+  <node pkg="kinectv2client" type="KinectV2Client" respawn="false" name="kinect_4" >
+	<param name="ipaddress" value="133.19.23.75" /> 
+	<param name="port" value="7745" />
+  	<param name="camera_frame" value="$(arg k4)" />
+  </node>
+
+  <node pkg="kinectv2client" type="KinectV2Client" respawn="false" name="kinect_5" >
+	<param name="ipaddress" value="133.19.23.154" /> 
+	<param name="port" value="7745" />
+  	<param name="camera_frame" value="$(arg k5)" />
+  </node>
+
+  <node pkg="kinectv2client" type="KinectV2Client" respawn="false" name="kinect_6" >
+	<param name="ipaddress" value="133.19.23.215" /> 
+	<param name="port" value="7745" />
+  	<param name="camera_frame" value="$(arg k6)" />
+  </node>
+
+  <node pkg="kinectv2client" type="KinectV2Client" respawn="false" name="kinect_7" >
+	<param name="ipaddress" value="133.19.23.84" /> 
+	<param name="port" value="7745" />
+  	<param name="camera_frame" value="$(arg k7)" />
+  </node>
+
+
+  <node pkg="tf" type="static_transform_publisher" name="transform_1" args="0.1 0 1.0 0 0 0 /base_link $(arg k1) 100" /> 
+
+  <node pkg="tf" type="static_transform_publisher" name="transform_2" args="-1.5 3.2 2.61  0.4 0.7 0 /map $(arg k2) 10" /> 
+
+  <node pkg="tf" type="static_transform_publisher" name="transform_3" args="-7.17 3.13 0.94  0 0 0 /map $(arg k3) 10" /> 
+
+  <node pkg="tf" type="static_transform_publisher" name="transform_4" args="-1.1 -23.53 1.35 -0.959 0 0 /map $(arg k4) 10" /> 
+
+  <node pkg="tf" type="static_transform_publisher" name="transform_5" args="-1.5 4.5 0.8 -0.7875 0 0 /map $(arg k5) 10" /> 
+
+  <node pkg="tf" type="static_transform_publisher" name="transform_6" args="-1.5 7.5 1.2 1.22 0 0 /map $(arg k6) 10" /> 
+
+  <node pkg="tf" type="static_transform_publisher" name="transform_7" args="-6.48 5.04 0.8 0.7875 0 0 /map $(arg k7) 10" /> 
+
+
+  <node pkg="okao_client" type="OkaoClient" name="okao_1" >
+  	<remap from="/camera/image/color" to="$(arg k1)/image/color" />
+	<remap from="/camera/image/face_detect" to="$(arg k1)/image/face_detect" />
+  </node>
+
+  <node pkg="okao_client" type="OkaoClient" name="okao_2" >
+  	<remap from="/camera/image/color" to="$(arg k2)/image/color" />
+	<remap from="/camera/image/face_detect" to="$(arg k2)/image/face_detect" />
+  </node>
+
+  <node pkg="okao_client" type="OkaoClient" name="okao_3" >
+  	<remap from="/camera/image/color" to="$(arg k3)/image/color" />
+	<remap from="/camera/image/face_detect" to="$(arg k3)/image/face_detect" />
+  </node>
+
+  <node pkg="okao_client" type="OkaoClient" name="okao_4" >
+  	<remap from="/camera/image/color" to="$(arg k4)/image/color" />
+	<remap from="/camera/image/face_detect" to="$(arg k4)/image/face_detect" />
+  </node>
+
+  <node pkg="okao_client" type="OkaoClient" name="okao_5" >
+  	<remap from="/camera/image/color" to="$(arg k5)/image/color" />
+	<remap from="/camera/image/face_detect" to="$(arg k5)/image/face_detect" />
+  </node>
+
+  <node pkg="okao_client" type="OkaoClient" name="okao_6" >
+  	<remap from="/camera/image/color" to="$(arg k6)/image/color" />
+	<remap from="/camera/image/face_detect" to="$(arg k6)/image/face_detect" />
+  </node>
+
+  <node pkg="okao_client" type="OkaoClient" name="okao_7" >
+  	<remap from="/camera/image/color" to="$(arg k7)/image/color" />
+	<remap from="/camera/image/face_detect" to="$(arg k7)/image/face_detect" />
+  </node>
+
+</launch>

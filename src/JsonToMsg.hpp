@@ -8,19 +8,22 @@
 #include "picojson.h"
 #include <humans_msgs/Humans.h>
 #include <tf/transform_broadcaster.h>
+//#include <tf2_ros/transform_broadcaster.h>
 #include <cstdlib>
 
 typedef std::map<int, std::string> JointMap;
 
-
+/*
 class POSE{
 public:
   double x;
   double y;
   double z;
 };
+*/
 
 namespace JsonToMsg{
+
   
   bool publishJointTF(ros::NodeHandle& nh, 
 		      tf::TransformBroadcaster& br, tf::Transform& transform, 
@@ -47,8 +50,34 @@ namespace JsonToMsg{
     return true;
   }
   
+  /*
+  bool publishJointTF(ros::NodeHandle& nh, 
+		      tf2_ros::TransformBroadcaster& br, tf::Transform& transform, 
+		      humans_msgs::Human h, int j_n, std::string camera_frame)
+  {
+    //cout << "joint name: "<< j_name << ", (x, y, z) = " <<j.position.x <<", "<<j.position.y <<", "<<j.position.z <<endl;
+    transform.setOrigin(tf::Vector3(h.body.joints[j_n].position.x,
+				    h.body.joints[j_n].position.y, 
+				    h.body.joints[j_n].position.z));
+
+    transform.setRotation(tf::Quaternion(h.body.joints[j_n].orientation.x, 
+					 h.body.joints[j_n].orientation.y, 
+					 h.body.joints[j_n].orientation.z, 
+					 h.body.joints[j_n].orientation.w));
+    //transform.setRotation(tf::Quaternion(0, 0, 0, 1));
+    
+    std::stringstream frame_id_stream;
+    std::string frame_id;
+    frame_id_stream << "/" << h.body.tracking_id <<"/" 
+		    << h.body.joints[j_n].joint_name;
+    frame_id = frame_id_stream.str();
+    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), 
+					  camera_frame, frame_id));
+    return true;
+  }
+  */
   void body(ros::NodeHandle& nh, 
-	    tf::TransformBroadcaster& br, tf::Transform& transform,
+	    /*tf::TransformBroadcaster& br, tf::Transform& transform,*/
 	    const KinectPack kinectPack , humans_msgs::Humans *kinect_msg, 
 	    double cols, double rows, std::string camera_frame)
   {
@@ -171,12 +200,15 @@ namespace JsonToMsg{
 
 		    tmp_human.body.joints.push_back( tmp_joint );
 		    //tmp_human.body.b
+		    //tf変換
+		    /*
 		    if(tmp_joint.orientation.x || tmp_joint.orientation.y 
 		       || tmp_joint.orientation.z || tmp_joint.orientation.w)
 		      {
 			publishJointTF(nh, br, transform, tmp_human, 
 				       j_name, camera_frame);
 		      }
+		    */
 		  }
 		kinect_msg->human.push_back( tmp_human );	
 		++people_num;

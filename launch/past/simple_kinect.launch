@@ -1,0 +1,19 @@
+<launch>
+  <arg name="k1" value="camera_link" />
+
+  <node pkg="kinectv2client" type="KinectV2Client2" respawn="false" name="kinect_1" >
+	<param name="ipaddress" value="133.19.23.90" /> 
+	<param name="port" value="7745" />
+  	<param name="c_frame" value="$(arg k1)" />
+  </node>
+
+
+  <node pkg="tf" type="static_transform_publisher" name="transform_1" args="0.1 0 1.0 0 -0.087 0 /base_link $(arg k1) 100" /> 
+
+
+  <node pkg="okao_client" type="OkaoClient" name="okao_1" >
+  	<remap from="/camera/image/color" to="$(arg k1)/image/color" />
+	<remap from="/camera/image/face_detect" to="$(arg k1)/image/face_detect" />
+  </node>
+
+</launch>

@@ -1,0 +1,37 @@
+<launch>
+
+    <include file = "$(find kinectv2client)/launch/kinect.launch">
+      <arg name="camera_name" value="camera" />
+      <arg name="camera_frame" value="camera_link" />
+      <arg name="base_frame" value="base_link" />
+      <arg name="ipaddress" value="133.19.23.90" />
+      <arg name="port" value="7745" />
+      <arg name="transform" value="transform_1" />
+      <arg name="x" value="0.1" />
+      <arg name="y" value="0" />
+      <arg name="z" value="1.0" />
+      <arg name="yaw" value="0" />
+      <arg name="pitch" value="0" />
+      <arg name="roll" value="-0.087" />
+      <arg name="okao_name" value="okao_1" />
+    </include>
+
+
+    <include file = "$(find kinectv2client)/launch/kinect.launch">
+      <arg name="camera_name" value="kinect_2" />
+      <arg name="camera_frame" value="kinect2_link" />
+      <arg name="base_frame" value="map" />
+      <arg name="ipaddress" value="133.19.23.224" />
+      <arg name="port" value="7745" />
+      <arg name="transform" value="transform_2" />
+      <arg name="x" value="-1.5" />
+      <arg name="y" value="3.2" />
+      <arg name="z" value="2.61" />
+      <arg name="yaw" value="0.4" />
+      <arg name="pitch" value="0.7" />
+      <arg name="roll" value="0" />
+      <arg name="okao_name" value="okao_2" />
+    </include>
+
+
+</launch>
