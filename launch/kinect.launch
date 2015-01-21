@@ -21,7 +21,7 @@
 
   <node pkg="tf" type="static_transform_publisher" name="$(arg transform)" args="$(arg x) $(arg y) $(arg z) $(arg yaw) $(arg pitch) $(arg roll) $(arg base_frame) $(arg camera_frame) 100" /> 
 
-  <node pkg="okao_client" type="OkaoClient" name="$(arg okao_name)" >
+  <node pkg="okao_client" type="OkaoClient" name="$(arg okao_name)" output="screen">
   	<remap from="/camera/image/color" to="$(arg camera_frame)/image/color" />
 	<remap from="/camera/image/face_detect" to="$(arg camera_frame)/image/face_detect" />
   </node>

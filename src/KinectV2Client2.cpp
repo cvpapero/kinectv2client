@@ -1,7 +1,7 @@
 /*
 やること：tf2に移行する
 */
-
+ 
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -14,8 +14,8 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 
-#include <sensor_msgs/CameraInfo.h>
-#include <camera_info_manager/camera_info_manager.h>
+//#include <sensor_msgs/CameraInfo.h>
+//#include <camera_info_manager/camera_info_manager.h>
 
 //#include <tf/transform_broadcaster.h>
 #include <tf2_ros/transform_broadcaster.h>
@@ -37,14 +37,14 @@ private:
   ros::NodeHandle pnh;
 
   //ros::NodeHandle comm_nh;
-  camera_info_manager::CameraInfoManager info_mgr;
+  //  camera_info_manager::CameraInfoManager info_mgr;
 
   image_transport::ImageTransport it;
   image_transport::Publisher color_pub;
   image_transport::Publisher depth_pub;
   image_transport::Publisher bodyindex_pub;
   ros::Publisher kinectv2_pub;
-  ros::Publisher info_pub;
+  //  ros::Publisher info_pub;
 
   //tf::TransformBroadcaster br;
   tf2_ros::TransformBroadcaster br;
@@ -60,7 +60,7 @@ private:
 
 public:
   Connection()
-    :it(nh), pnh("~"), info_mgr( nh, "camera" )
+    :it(nh), pnh("~")//, info_mgr( nh, "camera" )
   {
     cout << __FUNCTION__ << endl;
     pnh.param<std::string>("ipaddress", ipaddress, "133.19.23.90") ;
@@ -73,23 +73,19 @@ public:
     //pnh.param<double>("roll", roll, 0);
     //pnh.param<double>("pich", pich, -0.087);
     //pnh.param<double>("yaw", yaw, 0);
-   
+    //pnh.getParam("camera_info_url", url);
+    //info_mgr.setCameraName( c_frame );
+    //info_mgr.loadCameraInfo( url );
 
-    pnh.getParam("camera_info_url", url);
-
-    info_mgr.setCameraName( c_frame );
-    info_mgr.loadCameraInfo( url );
-
-    string color_topic, depth_topic, bodyindex_topic, info_topic;
+    string color_topic, depth_topic, bodyindex_topic;//, info_topic;
     color_topic = "/" + c_frame + "/image/color";
     depth_topic = "/" + c_frame + "/image/depth";
     bodyindex_topic = "/" + c_frame + "/image/bodyindex";
-    info_topic = "/" + c_frame + "/camera_info";
+    //info_topic = "/" + c_frame + "/camera_info";
     color_pub = it.advertise( color_topic, 1 );
     depth_pub = it.advertise( depth_topic, 1 );
     bodyindex_pub = it.advertise( bodyindex_topic, 1 );
-
-    info_pub = nh.advertise<sensor_msgs::CameraInfo>( info_topic, 1 );
+    //info_pub = nh.advertise<sensor_msgs::CameraInfo>( info_topic, 1 );
     kinectv2_pub = nh.advertise<humans_msgs::Humans>("/humans/KinectV2",10);
     try
       {

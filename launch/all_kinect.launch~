@@ -6,6 +6,7 @@
       <arg name="base_frame" value="base_link" />
       <arg name="ipaddress" value="133.19.23.90" />
       <arg name="port" value="7745" />
+
       <arg name="transform" value="transform_1" />
       <arg name="x" value="0.1" />
       <arg name="y" value="0" />
@@ -13,6 +14,7 @@
       <arg name="yaw" value="0" />
       <arg name="pitch" value="0" />
       <arg name="roll" value="-0.087" />
+
       <arg name="okao_name" value="okao_1" />
     </include>
 
@@ -23,6 +25,7 @@
       <arg name="base_frame" value="map" />
       <arg name="ipaddress" value="133.19.23.224" />
       <arg name="port" value="7745" />
+
       <arg name="transform" value="transform_2" />
       <arg name="x" value="-1.5" />
       <arg name="y" value="3.2" />
@@ -30,6 +33,7 @@
       <arg name="yaw" value="0.4" />
       <arg name="pitch" value="0.7" />
       <arg name="roll" value="0" />
+
       <arg name="okao_name" value="okao_2" />
     </include>
 
