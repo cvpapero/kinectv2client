@@ -109,10 +109,13 @@ namespace JsonToMsg{
     named_joints[23] = "HandTipRight";
     named_joints[24] = "ThumbRight";
 
+    //std::cout << kinectPack.bodies.jsonBodyInfo << std::endl;
+
     picojson::value v;
     std::string err;
     picojson::parse( v, kinectPack.bodies.jsonBodyInfo.begin(), 
 		     kinectPack.bodies.jsonBodyInfo.end(), &err );
+
 
 
     if ( err.empty() )
@@ -135,9 +138,10 @@ namespace JsonToMsg{
 	      =  objBody["isTracked"].get< bool >() ;
 	    if ( isTracking )
 	      {
+		//std::cout << objBody["trackingID"].get< std::string >() << std::endl;
 		long long tracking_id 
 		  = std::atoll( objBody["trackingID"].get< std::string >().c_str() );
-		std::cout << "tracking_id[" << index << "]:" << tracking_id << std::endl;
+		//std::cout << "tracking_id[" << index << "]:" << tracking_id << std::endl;
 		humans_msgs::Human tmp_human;
 		//hoge.body.is_tracked = isTracking;
 		

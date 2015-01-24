@@ -135,7 +135,7 @@ public:
 	// データを受信する
 	string message;
 	Connection::recv( message ); // サーバから帰ってくる文字列
-	//cout << "recv" <<endl;
+	//cout << recv <<endl;
 	// メッセージを指定形式(今回はKinectPack)に変換
 	// 送られてくるデータ形式と異なるとエラー
 	KinectPack kinectPack;
@@ -184,6 +184,7 @@ public:
 	cv_bridge::CvImage cv_img_color, cv_img_depth, cv_img_bodyindex;
 
 	ros::Time time = ros::Time::now();
+
 
 	cv_img_color.header.stamp = time;
 	cv_img_color.header.frame_id = c_frame;

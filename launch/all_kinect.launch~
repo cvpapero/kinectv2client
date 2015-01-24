@@ -4,7 +4,7 @@
       <arg name="camera_name" value="camera" />
       <arg name="camera_frame" value="camera_link" />
       <arg name="base_frame" value="base_link" />
-      <arg name="ipaddress" value="133.19.23.90" />
+      <arg name="ipaddress" value="133.19.23.48" />
       <arg name="port" value="7745" />
 
       <arg name="transform" value="transform_1" />
@@ -23,7 +23,7 @@
       <arg name="camera_name" value="kinect_2" />
       <arg name="camera_frame" value="kinect2_link" />
       <arg name="base_frame" value="map" />
-      <arg name="ipaddress" value="133.19.23.224" />
+      <arg name="ipaddress" value="133.19.23.110" />
       <arg name="port" value="7745" />
 
       <arg name="transform" value="transform_2" />
@@ -36,6 +36,101 @@
 
       <arg name="okao_name" value="okao_2" />
     </include>
+
+
+    <include file = "$(find kinectv2client)/launch/kinect.launch">
+      <arg name="camera_name" value="kinect_3" />
+      <arg name="camera_frame" value="kinect3_link" />
+      <arg name="base_frame" value="map" />
+      <arg name="ipaddress" value="133.19.23.224" />
+      <arg name="port" value="7745" />
+
+      <arg name="transform" value="transform_3" />
+      <arg name="x" value="-7.17" />
+      <arg name="y" value="3.13" />
+      <arg name="z" value="0.94" />
+      <arg name="yaw" value="0" />
+      <arg name="pitch" value="0" />
+      <arg name="roll" value="0" />
+
+      <arg name="okao_name" value="okao_3" />
+    </include>
+
+
+    <include file = "$(find kinectv2client)/launch/kinect.launch">
+      <arg name="camera_name" value="kinect_4" />
+      <arg name="camera_frame" value="kinect4_link" />
+      <arg name="base_frame" value="map" />
+      <arg name="ipaddress" value="133.19.23.85" />
+      <arg name="port" value="7745" />
+
+      <arg name="transform" value="transform_4" />
+      <arg name="x" value="-1.1" />
+      <arg name="y" value="-23.53" />
+      <arg name="z" value="1.35" />
+      <arg name="yaw" value="-0.959" />
+      <arg name="pitch" value="0" />
+      <arg name="roll" value="0" />
+
+      <arg name="okao_name" value="okao_4" />
+    </include>
+
+    <include file = "$(find kinectv2client)/launch/kinect.launch">
+      <arg name="camera_name" value="kinect_5" />
+      <arg name="camera_frame" value="kinect5_link" />
+      <arg name="base_frame" value="map" />
+      <arg name="ipaddress" value="133.19.23.215" />
+      <arg name="port" value="7745" />
+
+      <arg name="transform" value="transform_5" />
+      <arg name="x" value="-1.5" />
+      <arg name="y" value="7.5" />
+      <arg name="z" value="1.2" />
+      <arg name="yaw" value="1.22" />
+      <arg name="pitch" value="0" />
+      <arg name="roll" value="0" />
+
+      <arg name="okao_name" value="okao_5" />
+    </include>
+
+    <include file = "$(find kinectv2client)/launch/kinect.launch">
+      <arg name="camera_name" value="kinect_6" />
+      <arg name="camera_frame" value="kinect6_link" />
+      <arg name="base_frame" value="map" />
+      <arg name="ipaddress" value="133.19.23.222" />
+      <arg name="port" value="7745" />
+
+      <arg name="transform" value="transform_6" />
+      <arg name="x" value="-1.64" />
+      <arg name="y" value="1.9" />
+      <arg name="z" value="1.35" />
+      <arg name="yaw" value="-0.959" />
+      <arg name="pitch" value="0" />
+      <arg name="roll" value="0" />
+
+      <arg name="okao_name" value="okao_6" />
+    </include>
+
+    <include file = "$(find kinectv2client)/launch/kinect.launch">
+      <arg name="camera_name" value="kinect_4" />
+      <arg name="camera_frame" value="kinect4_link" />
+      <arg name="base_frame" value="map" />
+      <arg name="ipaddress" value="133.19.23.154" />
+      <arg name="port" value="7745" />
+
+      <arg name="transform" value="transform_4" />
+      <arg name="x" value="-1.1" />
+      <arg name="y" value="-23.53" />
+      <arg name="z" value="1.35" />
+      <arg name="yaw" value="-0.959" />
+      <arg name="pitch" value="0" />
+      <arg name="roll" value="0" />
+
+      <arg name="okao_name" value="okao_4" />
+    </include>
+
+
+
 
 
 </launch>
