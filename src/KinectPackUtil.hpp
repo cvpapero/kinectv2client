@@ -42,7 +42,7 @@ namespace KinectPackUtil{
 		  {
 		    picojson::object &objJoint = itrJoint->get< picojson::object >();
 		    picojson::object &objPositionColorSpace = objJoint["PositionColorSpace"].get< picojson::object >();
-		    cv::circle( dst, cv::Point( (int)objPositionColorSpace["X"].get<double>()*cols, (int)objPositionColorSpace["Y"].get<double>()*rows ), radius, cv::Scalar( 0, 0, 200 ), thickness );
+		    cv::circle( dst, cv::Point( (int)objPositionColorSpace["X"].get<double>()*cols, (int)objPositionColorSpace["Y"].get<double>()*rows ), radius, cv::Scalar( 0, 200, 200 ), thickness );
 		  }
 	      }
 	  }

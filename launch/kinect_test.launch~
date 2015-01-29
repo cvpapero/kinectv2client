@@ -13,7 +13,7 @@
   <arg name="roll" default="0" />
   <arg name="okao_name" default="okao" />
 
-  <node pkg="kinectv2client" type="KinectV2Client2" respawn="false" name="$(arg camera_name)" >
+  <node pkg="kinectv2client" type="KinectV2ClientTest" respawn="false" name="$(arg camera_name)" >
 	<param name="ipaddress" value="$(arg ipaddress)" /> 
 	<param name="port" value="$(arg port)" />
   	<param name="c_frame" value="$(arg camera_frame)" />

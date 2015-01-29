@@ -111,6 +111,7 @@
       <arg name="okao_name" value="okao_6" />
     </include>
 
+<!--
     <include file = "$(find kinectv2client)/launch/kinect.launch">
       <arg name="camera_name" value="kinect_7" />
       <arg name="camera_frame" value="kinect4_link" />
@@ -128,9 +129,7 @@
 
       <arg name="okao_name" value="okao_7" />
     </include>
-
-
-
+-->
 
 
 </launch>

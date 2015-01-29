@@ -179,8 +179,8 @@ add_library(base64
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(KinectV2Client src/KinectV2Client.cpp)
-target_link_libraries(KinectV2Client ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZMQ_LIBRARIE} msgpack Util base64)
+add_executable(KinectV2ClientTest src/KinectV2ClientTest.cpp)
+target_link_libraries(KinectV2ClientTest ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZMQ_LIBRARIE} msgpack Util base64)
 
 add_executable(KinectV2Client2 src/KinectV2Client2.cpp)
 target_link_libraries(KinectV2Client2 ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZMQ_LIBRARIE} msgpack Util base64)
